@@ -10,4 +10,11 @@ fun main(args: Array<String>) {
 
     mobile.printDetails()
 
+    // kotlin for loop
+
+    var languages = arrayOf("JavaScript", "Kotlin", "Python", "Java")
+
+    for (item in languages)
+        println(item)
+
 }
