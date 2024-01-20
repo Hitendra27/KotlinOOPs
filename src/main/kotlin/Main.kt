@@ -1,20 +1,12 @@
-fun main(args: Array<String>) {
+fun main() {
+    val totalPhotos: Int = 100
+    val deletedPhotos: Int = 10
 
-    val mobile = Mobile()
-    mobile.brand = "Iphone"
-    mobile.model = "11 pro"
-    mobile.mrp = 10000f
-    mobile.discount = 1000f
-
-    println("Discounted price is: ${mobile.getActualPrice()}")
-
-    mobile.printDetails()
-
-    // kotlin for loop
-
-    var languages = arrayOf("JavaScript", "Kotlin", "Python", "Java")
-
-    for (item in languages)
-        println(item)
-
+    println("$totalPhotos photos")
+    println("$deletedPhotos photos deleted")
+    println("${totalPhotos - deletedPhotos} photos left")
 }
+
+// 100 photos
+// 10 photos deleted
+// 90 phontos left
