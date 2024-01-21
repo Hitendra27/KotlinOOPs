@@ -8,5 +8,8 @@ class `Kotlin Basics 1st practice problems` {
 //        println("When you call a function, you pass arguments for the parameters.")
 //    }
 
-
+// print
+fun weatherDetails() {
+   println("")
+}
 }
