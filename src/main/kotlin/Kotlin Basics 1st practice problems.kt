@@ -11,5 +11,6 @@ class `Kotlin Basics 1st practice problems` {
 // print
 fun weatherDetails() {
    println("")
+   println("Sanjay")
 }
 }
