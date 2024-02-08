@@ -13,5 +13,6 @@ fun weatherDetails() {
    println("")
    println("Sanjay")
    println("Sanj")
+   println("Sanj")
 }
 }
