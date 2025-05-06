@@ -1,100 +1,71 @@
-
-
 fun main() {
 
-    val movie1 = Movie("Interseller", "Sci-Fi", 8.5)
-    println(movie1.getDetails())
-    println()
+    val fiction = FictionBook("1984", "George Orwell", 1949, "Dystopian")
+    val acedemic = AcademicBook("Clean Code", "Robert C. Martin", 2008, "Software Engineering")
 
-    val movie2 = Movie("Shutter Island", "Thriller", 9.3)
-    println(movie2.getDetails())
-    println()
+    val library = Library()
+    library.addBook(fiction)
+    library.addBook(acedemic)
 
-    val action = ActionMovie("John Wick")
-    val comedy = ComedyMovie("Superbad")
-
-    showTrailer(action)
-    showTrailer(comedy)
-    println()
-
-    val people = listOf(
-        Director("Christopher Nolan"),
-        Actor("Leonardo DiCaprio")
-    )
-
-    for (person in people) {
-        person.role()
-    }
+    library.showCatelog()
 
 }
 
-class Movie(
-    private val title: String,
-    private val genre: String,
-    private var rating: Double
-) {
-    fun getDetails(): String {
-        return "Movie: $title\nGenre: $genre\nRating: $rating"
-    }
-
-    fun updateRating(newRating: Double) {
-        if (newRating in 0.0..10.0) {
-            rating = newRating
-        } else {
-            println("Invalid rating. must be between 0.0 and 10.0")
-        }
-    }
-}
-
-open class MovieBase(
+// Base class
+open class Book(
     val title: String,
+    val author: String,
+    val year: Int
+) {
+    open fun geDescription(): String {
+        return "'$title' by $author, published in $year"
+    }
+}
+
+// Subclass
+class FictionBook(
+    title: String,
+    author: String,
+    year: Int,
     val genre: String
-) {
-    open fun playTrailer() {
-        println("Playing trailer for $title")
+) : Book(title, author, year) {
+    override fun geDescription(): String {
+        return super.geDescription() + "- Genre: $genre"
     }
 }
 
-class ActionMovie(
-    title: String
-) : MovieBase(title, "Action") {
-    override fun playTrailer() {
-        println("💥 Explosions! Playing action trailer for $title")
+// Subclass 2
+class AcademicBook(
+    title: String,
+    author: String,
+    year: Int,
+    val subject: String
+) : Book(title, author, year) {
+    override fun geDescription(): String {
+        return super.geDescription() + " - Subject: $subject"
     }
 }
 
-class ComedyMovie(
-    title: String
-) : MovieBase(title, "Comedy") {
-    override fun playTrailer() {
-        println("😂 Jokes! Playing comedy trailer for $title")
+// class demonstrating encapsulation
+class Library {
+    private val books = mutableListOf<Book>() // private property
+
+    fun addBook(book: Book) {
+        books.add(book)
+        println("Book added: ${book.title}")
+    }
+
+    fun showCatelog() {
+        println("Library Catalog:")
+        books.forEach { println(it.geDescription()) }
     }
 }
 
-fun showTrailer(movie: MovieBase) {
-    movie.playTrailer()
-}
 
-val movies = listOf(
-    ActionMovie("Mad Max"),
-    ComedyMovie("The Office"),
-    ActionMovie("The Matrix")
-)
 
-abstract class Person(
-    val name: String
-) {
-    abstract fun role()
-}
 
-class Director(name: String) : Person(name) {
-    override fun role() {
-        println("$name is directing the movie.")
-    }
-}
 
-class Actor(name: String) : Person(name) {
-    override fun role() {
-        println("$name is acting in the movie.")
-    }
-}
+
+
+
+
