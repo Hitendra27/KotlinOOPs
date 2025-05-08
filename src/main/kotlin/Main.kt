@@ -1,68 +1,55 @@
 fun main() {
 
-    val runningInfo = ShoeInfo("Rubber", "Red")
-    val formalInfo = ShoeInfo("Leather", "Black")
+    val games : List<Game> = listOf(
+        ActionGame("Battle Zone"),
+        PuzzleGame("Brain Teaser")
+    )
 
-    val myRunningShoes = RunningShoe("Nike", 42, runningInfo)
-    val myFormalShoes = FormalShoe("Clarks", 43, formalInfo)
-
-    val shoes: List<Shoe> = listOf(myRunningShoes, myFormalShoes)
-
-    for (shoe in shoes) {
-        println(shoe.getDetails())
-        if (shoe is Wearable) {
-            println(shoe.wear())
-        }
+    games.forEach {game ->
+        val result = game.play()
+        println("Game; ${game.name} [${game.genre}]")
+        println("Result: ${result.message}, Score: ${result.score}")
         println()
     }
 }
 
-// Base class (abstract)
-abstract class Shoe(
-    val brand: String,
-    val size: Int
+// Enum class
+enum class GameGenre {
+    ACTION, ADVENTURE, PUZZLE, RPG, SPORTS
+}
+
+// Base class - Abstract class
+abstract class Game(
+    val name: String,
+    val genre: GameGenre
 ) {
-    abstract fun getDetails(): String
+    abstract fun play(): GameResult
 }
 
-// Wearable Interface
-interface Wearable {
-    fun wear(): String
-}
-
-// data class to hold Shoe info
-data class ShoeInfo(
-    val material: String,
-    val color: String
+// data class
+data class GameResult(
+    val success: Boolean,
+    val score: Int,
+    val message: String
 )
 
-// Subclasses of Shoe
-class RunningShoe(
-    brand: String,
-    size: Int,
-    val info: ShoeInfo
-) : Shoe(brand, size), Wearable {
-    override fun getDetails(): String {
-        return "Running Shoe - $brand, Size $size, Material: ${info.material}, Color: ${info.color}"
-    }
+// Subclass 1 - Action Game
+class ActionGame(
+    name: String
+) : Game(name, GameGenre.ACTION) {
 
-    override fun wear(): String {
-        return "Ready for a run with $brand shoes!"
+    override fun play(): GameResult {
+        return GameResult(true, 850, "$name played with intense action")
     }
 }
 
-// Subclass of shoe 2
-class FormalShoe(
-    brand: String,
-    size: Int,
-    val info: ShoeInfo
-) : Shoe(brand, size), Wearable {
-    override fun getDetails(): String {
-        return "Formal Shoe - $brand, Size $size, Made of ${info.material}, Color: ${info.color}"
-    }
+// Subclass 2 - Puzzle Game
+class PuzzleGame(
+    name: String
+) : Game(name, GameGenre.PUZZLE) {
 
-    override fun wear(): String {
-        return "Looking sharp with $brand formal shoes!"
+    override fun play(): GameResult {
+        return GameResult(true, 650, "$name solved with cleaver thinking!")
     }
 }
 
