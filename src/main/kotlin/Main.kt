@@ -1,5 +1,16 @@
 fun main() {
 
+    val chanelDetails = PerfumeDetails("Chanel", 100, 150.0)
+    val chanelPerfume = DesignerPerfume("Coco Mademoiselle", PerfumeType.FLORAL, chanelDetails, true)
+
+    println(chanelPerfume.describe())
+
+    val creedDetails = PerfumeDetails("Creed", 75, 320.0)
+    val creedPerfume = NichePerfume("Aventus", PerfumeType.WOODY, creedDetails, true)
+
+    println()
+    println(creedPerfume.describe())
+
 }
 
 // Enum class
