@@ -1,57 +1,62 @@
 fun main() {
 
-    val games : List<Game> = listOf(
-        ActionGame("Battle Zone"),
-        PuzzleGame("Brain Teaser")
-    )
-
-    games.forEach {game ->
-        val result = game.play()
-        println("Game; ${game.name} [${game.genre}]")
-        println("Result: ${result.message}, Score: ${result.score}")
-        println()
-    }
 }
 
 // Enum class
-enum class GameGenre {
-    ACTION, ADVENTURE, PUZZLE, RPG, SPORTS
+enum class PerfumeType {
+    FLORAL,
+    WOODY,
+    FRESH,
+    ORIENTAL,
+    CITRUS
 }
 
-// Base class - Abstract class
-abstract class Game(
-    val name: String,
-    val genre: GameGenre
-) {
-    abstract fun play(): GameResult
-}
-
-// data class
-data class GameResult(
-    val success: Boolean,
-    val score: Int,
-    val message: String
+data class PerfumeDetails(
+    val brand: String,
+    val volumeInML: Int,
+    val price: Double
 )
 
-// Subclass 1 - Action Game
-class ActionGame(
-    name: String
-) : Game(name, GameGenre.ACTION) {
+// Base class
+abstract class Perfume(
+    val name: String,
+    val type: PerfumeType,
+    val details: PerfumeDetails
+) {
+    abstract fun describe(): String
+}
 
-    override fun play(): GameResult {
-        return GameResult(true, 850, "$name played with intense action")
+// subclass 1
+class DesignerPerfume(
+    name: String,
+    type: PerfumeType,
+    details: PerfumeDetails,
+    val celebrityEndorsed: Boolean
+) : Perfume(name, type, details) {
+
+    override fun describe(): String {
+        val celebNote = if (celebrityEndorsed) "endorsed by a celebrity" else "not celebrity-endorsed"
+        return "$name is ${type.name.lowercase()} designer perfume, " +
+                "$celebNote, by ${details.brand}," +
+                "It costs $${details.price} for ${details.volumeInML}ml."
     }
 }
 
-// Subclass 2 - Puzzle Game
-class PuzzleGame(
-    name: String
-) : Game(name, GameGenre.PUZZLE) {
+class NichePerfume(
+    name: String,
+    type: PerfumeType,
+    details: PerfumeDetails,
+    val limitedEdition: Boolean
+) : Perfume(name, type, details) {
 
-    override fun play(): GameResult {
-        return GameResult(true, 650, "$name solved with cleaver thinking!")
+    override fun describe(): String {
+        val editionNote = if (limitedEdition) "a limited edition release" else "part of the regular collection"
+        return "$name is a ${type.name.lowercase()} niche perfume, $editionNote, from ${details.brand}." +
+                "It costs $${details.price} for ${details.volumeInML}ml."
     }
 }
+
+
 
 
 
