@@ -1,69 +1,69 @@
 fun main() {
 
-    val chanelDetails = PerfumeDetails("Chanel", 100, 150.0)
-    val chanelPerfume = DesignerPerfume("Coco Mademoiselle", PerfumeType.FLORAL, chanelDetails, true)
+    val japan = DevelopedCountry(
+        "Japan",
+        Continent.ASIA,
+        details = CountryDetails(125, 4000.0),
+        true
+    )
 
-    println(chanelPerfume.describe())
+    val india = Developingcountry(
+        "India",
+        Continent.ASIA,
+        CountryDetails(1400, 2200.0),
+        true
+    )
 
-    val creedDetails = PerfumeDetails("Creed", 75, 320.0)
-    val creedPerfume = NichePerfume("Aventus", PerfumeType.WOODY, creedDetails, true)
-
+    println(japan.getDescription())
     println()
-    println(creedPerfume.describe())
+    println(india.getDescription())
 
 }
 
-// Enum class
-enum class PerfumeType {
-    FLORAL,
-    WOODY,
-    FRESH,
-    ORIENTAL,
-    CITRUS
+enum class Continent {
+    ASIA, EUROPE, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, OCEANIA, ANTARCTICA
 }
 
-data class PerfumeDetails(
-    val brand: String,
-    val volumeInML: Int,
-    val price: Double
+data class CountryDetails(
+    val populationMillions: Int,
+    val gdpPerCapitalUSD: Double
 )
 
 // Base class
-abstract class Perfume(
+abstract class Country(
     val name: String,
-    val type: PerfumeType,
-    val details: PerfumeDetails
+    val continent: Continent,
+    val details: CountryDetails
 ) {
-    abstract fun describe(): String
+    abstract fun getDescription(): String
 }
 
 // subclass 1
-class DesignerPerfume(
+class DevelopedCountry(
     name: String,
-    type: PerfumeType,
-    details: PerfumeDetails,
-    val celebrityEndorsed: Boolean
-) : Perfume(name, type, details) {
-
-    override fun describe(): String {
-        val celebNote = if (celebrityEndorsed) "endorsed by a celebrity" else "not celebrity-endorsed"
-        return "$name is ${type.name.lowercase()} designer perfume, " +
-                "$celebNote, by ${details.brand}," +
-                "It costs $${details.price} for ${details.volumeInML}ml."
+    continent: Continent,
+    details: CountryDetails,
+    val isG7Member: Boolean
+) : Country(name, continent, details) {
+    override fun getDescription(): String {
+        val g7Status = if (isG7Member) "a G7 member" else "not a G7 memeber"
+        return "$name is a developed country in ${continent.name}. It has a population of " +
+                "${details.populationMillions}M and GDP per capita of $${details.gdpPerCapitalUSD}. It is $g7Status."
     }
 }
 
-class NichePerfume(
+// subclass 2
+class Developingcountry(
     name: String,
-    type: PerfumeType,
-    details: PerfumeDetails,
-    val limitedEdition: Boolean
-) : Perfume(name, type, details) {
+    continent: Continent,
+    details: CountryDetails,
+    val emergingMarket: Boolean
+) : Country(name, continent, details) {
 
-    override fun describe(): String {
-        val editionNote = if (limitedEdition) "a limited edition release" else "part of the regular collection"
-        return "$name is a ${type.name.lowercase()} niche perfume, $editionNote, from ${details.brand}." +
-                "It costs $${details.price} for ${details.volumeInML}ml."
+    override fun getDescription(): String {
+        val marketType = if (emergingMarket) "an emerging market" else "a developing economy"
+        return "$name is a developing country in ${continent.name}. It has a population of " +
+                "${details.populationMillions}M and GDP per capita of $${details.gdpPerCapitalUSD}. It is $marketType"
     }
 }
 
