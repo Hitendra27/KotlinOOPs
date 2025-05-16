@@ -1,71 +1,81 @@
 fun main() {
 
-    val japan = DevelopedCountry(
-        "Japan",
-        Continent.ASIA,
-        details = CountryDetails(125, 4000.0),
-        true
+    val california = USState(
+        populationMillions = 39.24,
+        isCoastal = true,
+        name = "California",
+        capital = "Sacramento",
+        region = Region.WEST
     )
 
-    val india = Developingcountry(
-        "India",
-        Continent.ASIA,
-        CountryDetails(1400, 2200.0),
-        true
+    val newYork = USState(
+        populationMillions = 19.84,
+        isCoastal = true,
+        name = "New York",
+        capital = "Albany",
+        region = Region.NORTHEAST
     )
 
-    println(japan.getDescription())
+    println(california.description())
     println()
-    println(india.getDescription())
+    println(newYork.description())
 
+    val branches = listOf(
+        FederalBranch.Execute,
+        FederalBranch.Legislative,
+        FederalBranch.Judicial
+    )
+
+    branches.forEach {
+        println("${it::class.simpleName}: ${it.dutyDescription()}")
+    }
 }
 
-enum class Continent {
-    ASIA, EUROPE, AFRICA, NORTH_AMERICA, SOUTH_AMERICA, OCEANIA, ANTARCTICA
+enum class Region {
+    NORTHEAST, MIDWEST, SOUTH, WEST
 }
 
-data class CountryDetails(
-    val populationMillions: Int,
-    val gdpPerCapitalUSD: Double
-)
+interface GovernmentDuty {
+    fun dutyDescription(): String
+}
 
-// Base class
-abstract class Country(
+abstract class State(
     val name: String,
-    val continent: Continent,
-    val details: CountryDetails
+    val capital: String,
+    val region: Region
 ) {
-    abstract fun getDescription(): String
+    abstract fun description(): String
 }
 
-// subclass 1
-class DevelopedCountry(
-    name: String,
-    continent: Continent,
-    details: CountryDetails,
-    val isG7Member: Boolean
-) : Country(name, continent, details) {
-    override fun getDescription(): String {
-        val g7Status = if (isG7Member) "a G7 member" else "not a G7 memeber"
-        return "$name is a developed country in ${continent.name}. It has a population of " +
-                "${details.populationMillions}M and GDP per capita of $${details.gdpPerCapitalUSD}. It is $g7Status."
+class USState(
+    val populationMillions: Double,
+    val isCoastal: Boolean,
+     name: String,
+     capital: String,
+     region: Region
+) : State(name, capital, region) {
+    override fun description(): String {
+        val coast = if (isCoastal) "on the coast" else "landlocked"
+        return "$name is a state in the $region. Capital: $capital. Population: $populationMillions million. It is $coast."
     }
 }
 
-// subclass 2
-class Developingcountry(
-    name: String,
-    continent: Continent,
-    details: CountryDetails,
-    val emergingMarket: Boolean
-) : Country(name, continent, details) {
+sealed class FederalBranch : GovernmentDuty {
+    object Execute : FederalBranch() {
+        override fun dutyDescription() = "Executes laws, headed by the President."
+    }
 
-    override fun getDescription(): String {
-        val marketType = if (emergingMarket) "an emerging market" else "a developing economy"
-        return "$name is a developing country in ${continent.name}. It has a population of " +
-                "${details.populationMillions}M and GDP per capita of $${details.gdpPerCapitalUSD}. It is $marketType"
+    object Legislative : FederalBranch() {
+        override fun dutyDescription() = "Makes laws, consists of Congress."
+    }
+
+    object Judicial : FederalBranch() {
+        override fun dutyDescription() = "Interprets laws, headed by the Supreme Court."
     }
 }
+
+
+
 
 
 
