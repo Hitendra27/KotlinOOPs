@@ -1,5 +1,36 @@
 fun main() {
 
+    val tesla = Sedan(
+        brand = "Tesla",
+        model = "Model S",
+        fuelType = FuelType.ELECTRIC,
+        specs = CarSpecs(horsepower = 670, weighKg = 2200, fuelEfficiency = 5.0),
+        luxuryLevel = "Premium"
+    )
+
+    val jeep = SUV(
+        brand = "Jeep",
+        model = "Wrangler",
+        fuelType = FuelType.DIESEL,
+        specs = CarSpecs(horsepower = 285, weighKg = 1960, fuelEfficiency = 10.0),
+        fourWheelDrive = true
+    )
+
+    println(tesla.getDescription())
+    println(tesla.drive())
+
+    println(jeep.getDescription())
+    println(jeep.drive())
+
+    val event: CarEvent = CarEvent.CarStarted(tesla)
+
+    when (event) {
+        is CarEvent.CarStarted -> println("${event.car.model} has started.")
+        is CarEvent.CarStopped -> println("${event.car.model} has stopped.")
+        is CarEvent.CarCrashed -> println("${event.car.model} crashed! Severity: ${event.severity}")
+        CarEvent.NoEvent -> println("No car event occurred")
+    }
+
 }
 
 enum class FuelType {
@@ -43,7 +74,30 @@ class Sedan(
     }
 }
 
-//class SUV() : Car() {}
+class SUV(
+    brand: String,
+    model: String,
+    fuelType: FuelType,
+    specs: CarSpecs,
+    val fourWheelDrive: Boolean
+) : Car(brand, model, fuelType, specs) {
+
+    override fun getDescription(): String {
+        val driveType = if (fourWheelDrive) "4WD" else "2WD"
+        return "$brand $model is an SUV with $driveType system and ${specs.horsepower} HP."
+    }
+
+    override fun drive(): String {
+        return "Cruising $brand $model off-read."
+    }
+}
+
+sealed class CarEvent {
+    data class CarStarted(val car: Car) : CarEvent()
+    data class CarStopped(val car: Car) : CarEvent()
+    data class CarCrashed(val car: Car, val severity: String): CarEvent()
+    object NoEvent: CarEvent()
+}
 
 
 
