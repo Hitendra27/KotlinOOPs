@@ -1,91 +1,55 @@
 fun main() {
 
-    val owner = PhoneOwner("Alice", "+123456789")
-    val androidPhone = AndroidPhone("Pixel 7", "14")
-    val ipone = Iphone("iphone 15,", "7")
-
-    val cureentState: PhoneState = PhoneState.AirplaneMode("10.30 AM")
-
-    println("Owner: ${owner.name}, Phone: ${androidPhone.model}")
-    androidPhone.call(owner.phoneNumber)
-    androidPhone.text(owner.phoneNumber, "Hello from Kotlin")
-
-    println("Owner: ${owner.name}, Phone: ${ipone.model}")
-    ipone.call(owner.phoneNumber)
-
-    // Check phone state
-    when (cureentState) {
-        is PhoneState.On -> println("Phone is On")
-        is PhoneState.Off -> println("Phone is off")
-        is PhoneState.AirplaneMode -> println("Phone is in Airplane Mode sice ${cureentState.enabledTime}")
-    }
-
-    println("Android Os: ${androidPhone.getOS()}")
-    println("iPhone OS: ${ipone.getOS()}")
 }
 
-interface PhoneFeatures {
-    fun call(number: String)
-    fun text(number: String, message: String)
+interface Wearable {
+    fun tryOn()
+    fun returnItem()
 }
 
-enum class PhoneBrand {
-    SAMSUNG, APPLE, GOOGLE, ONEPLUS
+enum class ShoeBrand {
+    NIKE, ADIDAS, PUMA, CLARKS, GUCCI
 }
 
-abstract class Phone(
-    val brand: PhoneBrand,
-    val model: String,
-) : PhoneFeatures {
-    abstract fun getOS(): String
+abstract class Shoe(
+    val brand: ShoeBrand,
+    val size: Int
+) : Wearable {
+    abstract fun category(): String
 }
 
-data class PhoneOwner(
+data class Customer(
     val name: String,
-    val phoneNumber: String
+    val email: String
 )
 
-sealed class PhoneState {
-    object On : PhoneState()
-    object Off : PhoneState()
-    data class AirplaneMode(
-        val enabledTime: String
-    ) : PhoneState()
+sealed class ShoeCondition {
+    object New: ShoeCondition()
+    object Used: ShoeCondition()
+    data class Refurbished(
+        val note: String,
+    ) : ShoeCondition()
 }
 
-class AndroidPhone(
-    model: String,
-    val version: String
-) : Phone(PhoneBrand.GOOGLE, model) {
+class RunningShoe(
+    brand: ShoeBrand,
+    size: Int
+) : Shoe(brand, size) {
+    override fun category(): String = "Running"
 
-    override fun getOS() = "Android $version"
-
-    override fun call(number: String) {
-        println("Calling $number using Android phone....")
+    override fun tryOn() {
+        println("Trying on running shoes of size $size from $brand")
     }
 
-    override fun text(number: String, message: String) {
-        println("Sending text to $number: $message")
-    }
-}
-
-class Iphone(
-    model: String,
-    val iosVersion: String
-) : Phone(PhoneBrand.APPLE, model) {
-
-    override fun getOS(): String {
-         return "iOS $iosVersion"
-    }
-
-    override fun call(number: String) {
-        println("Calling $number using Android phone...")
-    }
-
-    override fun text(number: String, message: String) {
-       println("Sending text to $number: $message")
+    override fun returnItem() {
+        println("Returning running shoes to store")
     }
 }
+
+
+
+
+
 
 
 
