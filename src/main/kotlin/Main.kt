@@ -1,92 +1,111 @@
 fun main() {
 
-    val customer = Customer("John Doe", "john@example.com")
+    val author1 = Author("Isaac Asimov", "USA")
+    val author2 = Author("Liane Moriaty", "UK")
+    val reader = Reader("Alice", "M001")
 
-    val shoe1 = RunningShoe(ShoeBrand.NIKE, 42)
-    val shoe2 = FormalShoe(ShoeBrand.CLARKS, 43)
+    val book1 = FictionBook("Foundation", author1)
+    val book2 = ScienceBook("A Brief History of Time", author2)
 
-    val condition: ShoeCondition = ShoeCondition.Refurbished("Minor scuff on left heel")
+    val status: BookStatus = BookStatus.Damaged("Water damage on back cover")
 
-    println("Customer; ${customer.name}")
-    println("Shoe !: ${shoe1.category()}, Brand: ${shoe1.brand}, Size: ${shoe1.size}")
-    shoe1.tryOn()
+    println("Reader: ${reader.name} is checking books.")
+    println("Book 1: ${book1.title}, Genre: ${book1.genre}")
+    book1.read()
+    book1.review(5)
 
-    println()
+    println("Book 2: ${book2.title}, Genre: ${book2.genre}")
+    book2.read()
 
-    println("Shoe 2: ${shoe2.category()}, Brand: ${shoe2.brand}, Size: ${shoe2.size}")
-    shoe2.tryOn()
-
-    println()
-
-    when (condition) {
-        is ShoeCondition.New -> println("The shoe is brand new.")
-        is ShoeCondition.Used -> println("The shoe is used.")
-        is ShoeCondition.Refurbished -> println("Refurbished: ${condition.note}")
+    when (status) {
+        is BookStatus.Available -> println("The book is available")
+        is BookStatus.Checkout -> println("The book is currently checked out.")
+        is BookStatus.Damaged -> println("The book is damaged: ${status.reason}")
     }
 
-    shoe1.returnItem()
-    shoe2.returnItem()
+    println(book1.summary())
+    println(book2.summary())
 
 }
 
-interface Wearable {
-    fun tryOn()
-    fun returnItem()
+interface Readable {
+    fun read()
+    fun review(rating: Int)
 }
 
-enum class ShoeBrand {
-    NIKE, ADIDAS, PUMA, CLARKS, GUCCI
+enum class Genre {
+    FICTION, NON_FICTION, SCIENCE, HISTORY, FANTASY, BIOGRAPHY
 }
 
-abstract class Shoe(
-    val brand: ShoeBrand,
-    val size: Int
-) : Wearable {
-    abstract fun category(): String
+abstract class Book(
+    val title: String,
+    val author: Author,
+    val genre: Genre,
+    val price: Double,
+    val stock: Int
+) : Readable{
+    abstract fun summary(): String
+
+    fun applyDiscount(percent: Double) {
+        val discout = price * (percent / 100)
+        price -= discout
+    }
 }
 
-data class Customer(
+data class Author (
     val name: String,
-    val email: String
+    val nationality: String
 )
 
-sealed class ShoeCondition {
-    object New: ShoeCondition()
-    object Used: ShoeCondition()
-    data class Refurbished(
-        val note: String,
-    ) : ShoeCondition()
+data class Reader (
+    val name: String,
+    val memberId: String
+)
+
+sealed class BookStatus {
+    object Available : BookStatus()
+    object Checkout : BookStatus()
+    data class Damaged(val reason: String) : BookStatus()
 }
 
-class RunningShoe(
-    brand: ShoeBrand,
-    size: Int
-) : Shoe(brand, size) {
-    override fun category(): String = "Running"
-
-    override fun tryOn() {
-        println("Trying on running shoes of size $size from $brand")
+class FictionBook(
+    title: String,
+    author: Author
+) : Book(
+    title,
+    author,
+    Genre.FICTION
+) {
+    override fun summary(): String {
+        return "$title is a thrilling story by ${author.name}"
     }
 
-    override fun returnItem() {
-        println("Returning running shoes to store")
+    override fun read() {
+        println("Reading fiction book '$title'...")
+    }
+
+    override fun review(rating: Int) {
+        println("You rated the fiction book '$title' with $rating stars.")
+    }
+}
+
+class ScienceBook(
+    title: String,
+    author: Author
+) : Book(title, author, Genre.SCIENCE) {
+    override fun summary(): String {
+        return "$title explores scientific concepts authored by ${author.name}"
+    }
+
+    override fun read() {
+        println("Reading science book '$title'...")
+    }
+
+    override fun review(rating: Int) {
+        println("You rated the science book '$title' with $rating stars.")
     }
 }
 
-class FormalShoe(
-    brand: ShoeBrand,
-    size: Int
-) : Shoe(brand, size) {
-    override fun category(): String = "Formal"
-
-    override fun tryOn() {
-        println("Trying on formal shoes of size $size from $brand")
-    }
-
-    override fun returnItem() {
-        println("Returning formal shoes to store")
-    }
-}
 
 
 
