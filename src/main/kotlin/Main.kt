@@ -1,112 +1,88 @@
 fun main() {
-
-    val author1 = Author("Isaac Asimov", "USA")
-    val author2 = Author("Liane Moriaty", "UK")
-    val reader = Reader("Alice", "M001")
-
-    val book1 = FictionBook("Foundation", author1)
-    val book2 = ScienceBook("A Brief History of Time", author2)
-
-    val status: BookStatus = BookStatus.Damaged("Water damage on back cover")
-
-    println("Reader: ${reader.name} is checking books.")
-    println("Book 1: ${book1.title}, Genre: ${book1.genre}")
-    book1.read()
-    book1.review(5)
-
-    println("Book 2: ${book2.title}, Genre: ${book2.genre}")
-    book2.read()
-
-    when (status) {
-        is BookStatus.Available -> println("The book is available")
-        is BookStatus.Checkout -> println("The book is currently checked out.")
-        is BookStatus.Damaged -> println("The book is damaged: ${status.reason}")
-    }
-
-    println(book1.summary())
-    println(book2.summary())
-
 }
 
-interface Readable {
-    fun read()
-    fun review(rating: Int)
+interface Wearable {
+    fun tryOn()
+    fun purchase()
 }
 
-enum class Genre {
-    FICTION, NON_FICTION, SCIENCE, HISTORY, FANTASY, BIOGRAPHY
+enum class Size {
+    XS, S, M, L, XL, XXL
 }
 
-abstract class Book(
-    val title: String,
-    val author: Author,
-    val genre: Genre,
-    val price: Double,
-    val stock: Int
-) : Readable{
-    abstract fun summary(): String
+enum class ClothingType {
+    SHIRT, PANTS, JACKET, DRESS, SKIRT
+}
+
+abstract class Clothing(
+    val name: String,
+    val size: Size,
+    val type: ClothingType,
+    var price: Double,
+    var stock: Int
+) : Wearable {
+    abstract fun description(): String
 
     fun applyDiscount(percent: Double) {
-        val discout = price * (percent / 100)
-        price -= discout
+        price -= price * (percent / 100)
     }
 }
 
-data class Author (
+data class Customer(
     val name: String,
-    val nationality: String
+    val membershipId: String
 )
 
-data class Reader (
-    val name: String,
-    val memberId: String
-)
-
-sealed class BookStatus {
-    object Available : BookStatus()
-    object Checkout : BookStatus()
-    data class Damaged(val reason: String) : BookStatus()
+sealed class ClothingStaus {
+    object Available: ClothingStaus()
+    object OutOfStock: ClothingStaus()
+    data class Damaged(val reason: String): ClothingStaus()
 }
 
-class FictionBook(
-    title: String,
-    author: Author
-) : Book(
-    title,
-    author,
-    Genre.FICTION
-) {
-    override fun summary(): String {
-        return "$title is a thrilling story by ${author.name}"
+class Shirt(
+    name: String,
+    size: Size,
+    price: Double,
+    stock: Int
+) : Clothing(name, size, ClothingType.SHIRT, price, stock) {
+
+    override fun tryOn() {
+        println("Tying on shirt: $name (Size: $size)")
     }
 
-    override fun read() {
-        println("Reading fiction book '$title'...")
+    override fun purchase() {
+        if (stock > 0) {
+            stock--
+            println("Shirt '$name' purchased successfully.")
+        } else {
+            println("Shirt '$name' is out of stock." )
+        }
     }
 
-    override fun review(rating: Int) {
-        println("You rated the fiction book '$title' with $rating stars.")
-    }
-}
-
-class ScienceBook(
-    title: String,
-    author: Author
-) : Book(title, author, Genre.SCIENCE) {
-    override fun summary(): String {
-        return "$title explores scientific concepts authored by ${author.name}"
-    }
-
-    override fun read() {
-        println("Reading science book '$title'...")
-    }
-
-    override fun review(rating: Int) {
-        println("You rated the science book '$title' with $rating stars.")
+    override fun description(): String {
+        return "$name is a stylish shirt in size $size."
     }
 }
 
+class Jacket(
+    name: String,
+    size: Size,
+    price: Double,
+    stock: Int
+) : Clothing(name, size, ClothingType.JACKET, price, stock) {
 
+    override fun tryOn() {
+        TODO("Not yet implemented")
+    }
+
+    override fun purchase() {
+        TODO("Not yet implemented")
+    }
+
+    override fun description(): String {
+        TODO("Not yet implemented")
+    }
+}
 
 
 
