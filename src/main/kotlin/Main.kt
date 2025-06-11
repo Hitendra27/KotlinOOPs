@@ -1,4 +1,24 @@
 fun main() {
+
+    val customer = Customer("Emma", "C102")
+
+    val shirt = Shirt("Casula Shirt", Size.M, 29.99, 2)
+    val jacket = Jacket("Winter Jacket", Size.L, 89.99, 1)
+    val damagedShirt = Shirt("Damaged Old Shirt", Size.S, 9.99, 1)
+
+    ClothingInventory.addItem(shirt)
+    ClothingInventory.addItem(jacket)
+    ClothingInventory.addItem(damagedShirt)
+
+    ClothingInventory.listAvailable()
+
+    println("\nCustomer: ${customer.name} is trying on clothes.")
+
+    shirt.tryOn()
+    shirt.purchase()
+
+    jacket.tryOn()
+    jacket.purchase()
 }
 
 interface Wearable {
@@ -72,15 +92,44 @@ class Jacket(
 ) : Clothing(name, size, ClothingType.JACKET, price, stock) {
 
     override fun tryOn() {
-        TODO("Not yet implemented")
+        println("Tying on jacket: $name (Size: $size)")
     }
 
     override fun purchase() {
-        TODO("Not yet implemented")
+        if (stock > 0) {
+            stock--
+            println("Jacket '$name' purchased successfully")
+        } else {
+            println("Jacket '$name' is out of stock.")
+        }
     }
 
     override fun description(): String {
-        TODO("Not yet implemented")
+        return "$name is a warm, comfortable jacket in size $size."
+    }
+}
+
+object ClothingInventory {
+    private val items = mutableListOf<Clothing>()
+
+    fun addItem(item: Clothing) {
+        items.add(item)
+        println("Added '${item.name} to inventory.")
+    }
+
+    fun listAvailable() {
+        println("🛍️ Available Clothing:")
+        items.filter { it.stock > 0}.forEach {
+            println("- ${it.name} (${it.type}, Size: ${it.size}) - \$${it.price}, Stock: ${it.stock}")
+        }
+    }
+
+    fun checkStatus(item: Clothing) : ClothingStaus {
+        return when {
+            item.stock == 0 -> ClothingStaus.OutOfStock
+            item.name.contains("damaged", ignoreCase = true) -> ClothingStaus.Damaged("Visible tears")
+            else -> ClothingStaus.Available
+        }
     }
 }
 
