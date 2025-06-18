@@ -19,6 +19,17 @@ fun main() {
 
     jacket.tryOn()
     jacket.purchase()
+
+    val status = ClothingInventory.checkStatus(damagedShirt)
+    when (status) {
+        is ClothingStaus.Available -> println("Item '${damagedShirt.name}' is available.")
+        is ClothingStaus.OutOfStock -> println("Item '${damagedShirt.name}' is out of stock.")
+        is ClothingStaus.Damaged -> println("Item '${damagedShirt.name}' is damaged: ${status.reason}")
+    }
+
+    println("\nDescription:")
+    println(shirt.description())
+    println(jacket.description())
 }
 
 interface Wearable {
