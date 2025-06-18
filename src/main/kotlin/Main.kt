@@ -1,40 +1,12 @@
+
+import java.util.*
 fun main() {
-
-    val customer = Customer("Emma", "C102")
-
-    val shirt = Shirt("Casula Shirt", Size.M, 29.99, 2)
-    val jacket = Jacket("Winter Jacket", Size.L, 89.99, 1)
-    val damagedShirt = Shirt("Damaged Old Shirt", Size.S, 9.99, 1)
-
-    ClothingInventory.addItem(shirt)
-    ClothingInventory.addItem(jacket)
-    ClothingInventory.addItem(damagedShirt)
-
-    ClothingInventory.listAvailable()
-
-    println("\nCustomer: ${customer.name} is trying on clothes.")
-
-    shirt.tryOn()
-    shirt.purchase()
-
-    jacket.tryOn()
-    jacket.purchase()
-
-    val status = ClothingInventory.checkStatus(damagedShirt)
-    when (status) {
-        is ClothingStaus.Available -> println("Item '${damagedShirt.name}' is available.")
-        is ClothingStaus.OutOfStock -> println("Item '${damagedShirt.name}' is out of stock.")
-        is ClothingStaus.Damaged -> println("Item '${damagedShirt.name}' is damaged: ${status.reason}")
-    }
-
-    println("\nDescription:")
-    println(shirt.description())
-    println(jacket.description())
 }
 
 interface Wearable {
     fun tryOn()
-    fun purchase()
+    fun purchase(customer: Customer)
+    fun returnItem(customer: Customer)
 }
 
 enum class Size {
@@ -61,8 +33,14 @@ abstract class Clothing(
 
 data class Customer(
     val name: String,
-    val membershipId: String
-)
+    val membershipId: String,
+    var rewardPoints: Int = 0,
+    val purchaseHistory: MutableList<Clothing> = mutableListOf()
+) {
+    fun addPoints(points: Int) {
+        rewardPoints += points
+    }
+}
 
 sealed class ClothingStaus {
     object Available: ClothingStaus()
@@ -81,13 +59,19 @@ class Shirt(
         println("Tying on shirt: $name (Size: $size)")
     }
 
-    override fun purchase() {
+    override fun purchase(customer: Customer) {
         if (stock > 0) {
             stock--
-            println("Shirt '$name' purchased successfully.")
+            customer.purchaseHistory.add(this)
+            customer.addPoints(10)
+            println("Shirt '$name' purchased. +10 reward points.")
         } else {
             println("Shirt '$name' is out of stock." )
         }
+    }
+
+    override fun returnItem(customer: Customer) {
+        TODO("Not yet implemented")
     }
 
     override fun description(): String {
