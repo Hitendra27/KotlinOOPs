@@ -1,6 +1,37 @@
 
 import java.util.*
 fun main() {
+
+    val customer = Customer("Olivia", "C204")
+
+    val shirt = Shirt("Casual Shirt", Size.M, 29.99, 2)
+    val jacket = Jacket("Winter Jacket", Size.L, 89.99, 1)
+
+    ClothingInventory.addItem(shirt)
+    ClothingInventory.addItem(jacket)
+
+    ClothingInventory.listAvailable()
+
+    println("\nCustomer: ${customer.name} is shopping...")
+
+    shirt.tryOn()
+    shirt.purchase(customer)
+
+    jacket.tryOn()
+    jacket.purchase(customer)
+
+    println("\\n\uD83C\uDFAF Reward Points: ${customer.rewardPoints}")
+
+    println("\nAttempting to return the jacket:")
+    jacket.returnItem(customer)
+
+    println("\\n\uD83C\uDFAF Reward Points after return: ${customer.rewardPoints}")
+
+    ClothingInventory.listAvailable()
+
+    // Filtering
+    ClothingInventory.filterBySize(Size.M)
+    ClothingInventory.filterByType(ClothingType.JACKET)
 }
 
 interface Wearable {
@@ -42,10 +73,10 @@ data class Customer(
     }
 }
 
-sealed class ClothingStaus {
-    object Available: ClothingStaus()
-    object OutOfStock: ClothingStaus()
-    data class Damaged(val reason: String): ClothingStaus()
+sealed class ClothingStatus {
+    object Available: ClothingStatus()
+    object OutOfStock: ClothingStatus()
+    data class Damaged(val reason: String): ClothingStatus()
 }
 
 class Shirt(
@@ -71,7 +102,13 @@ class Shirt(
     }
 
     override fun returnItem(customer: Customer) {
-        TODO("Not yet implemented")
+        stock++
+        if (customer.purchaseHistory.remove(this)) {
+            customer.rewardPoints -= 10
+            println("Returned '$name'. -10 reward points.")
+        } else {
+            println("This shirt wasn't purchased by ${customer.name}")
+        }
     }
 
     override fun description(): String {
@@ -90,12 +127,24 @@ class Jacket(
         println("Tying on jacket: $name (Size: $size)")
     }
 
-    override fun purchase() {
+    override fun purchase(customer: Customer) {
         if (stock > 0) {
             stock--
-            println("Jacket '$name' purchased successfully")
+            customer.purchaseHistory.add(this)
+            customer.addPoints(15)
+            println("Jacket '$name' purchased. +15 reward points.")
         } else {
             println("Jacket '$name' is out of stock.")
+        }
+    }
+
+    override fun returnItem(customer: Customer) {
+        stock++
+        if (customer.purchaseHistory.remove(this)) {
+            customer.rewardPoints -= 15
+            println("Returned '$name'. -15 reward points.")
+        } else {
+            println("This jacked wasn't purchased by ${customer.name}.")
         }
     }
 
@@ -109,21 +158,35 @@ object ClothingInventory {
 
     fun addItem(item: Clothing) {
         items.add(item)
-        println("Added '${item.name} to inventory.")
+        println("Added '${item.name}' to inventory.")
     }
 
     fun listAvailable() {
         println("🛍️ Available Clothing:")
-        items.filter { it.stock > 0}.forEach {
+        items.filter { it.stock > 0 }.forEach {
             println("- ${it.name} (${it.type}, Size: ${it.size}) - \$${it.price}, Stock: ${it.stock}")
         }
     }
 
-    fun checkStatus(item: Clothing) : ClothingStaus {
+    fun checkStatus(item: Clothing) : ClothingStatus {
         return when {
-            item.stock == 0 -> ClothingStaus.OutOfStock
-            item.name.contains("damaged", ignoreCase = true) -> ClothingStaus.Damaged("Visible tears")
-            else -> ClothingStaus.Available
+            item.stock == 0 -> ClothingStatus.OutOfStock
+            item.name.contains("damaged", ignoreCase = true) -> ClothingStatus.Damaged("Torn fabric")
+            else -> ClothingStatus.Available
+        }
+    }
+
+    fun filterBySize(size: Size) {
+        println("\\n\uD83D\uDCCF Filtered by size: $size")
+        items.filter { it.size == size && it.stock > 0 }.forEach {
+            println("- ${it.name} (${it.type}) - \$${it.price}")
+        }
+    }
+
+    fun filterByType(type: ClothingType) {
+        println("\\n\uD83D\uDC55 Filtered by type: $type")
+        items.filter { it.type == type && it.stock > 0 }.forEach {
+            println("- ${it.name} (Size: ${it.size}) - \$${it.price}")
         }
     }
 }
