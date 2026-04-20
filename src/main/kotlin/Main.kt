@@ -2,6 +2,30 @@ import com.sun.org.apache.xpath.internal.operations.And
 
 fun main() {
 
+    val user = User("Alice", "Premium")
+
+    val movie = Movie("Inception", Genre.ACTION, 148)
+    val show = TVShow("Stranger Things", Genre.DRAMA, 5)
+
+    val state: PlaybackState = PlaybackState.Buffering(60)
+
+    println("User: ${user.name}, Subscription: ${user.subscriptionType}")
+
+    println(movie.getDescription())
+    movie.play()
+    movie.pause()
+
+    println(show.getDescription())
+    show.play()
+
+    // Handel playback state
+    when (state) {
+        is PlaybackState.Playing -> println("Now playing...")
+        is PlaybackState.Paused -> println("Paused...")
+        is PlaybackState.Stopped -> println("Stopped.")
+        is PlaybackState.Buffering -> println("Buffering: ${state.percent}%")
+    }
+
 }
 
 interface Playable {
