@@ -1,37 +1,32 @@
 import com.sun.org.apache.xpath.internal.operations.And
 
 fun main() {
-    val myNovel = Novel(
+    val novel1 = Novel(
         "The Alchemist",
         "Paulo Coelho",
         208
     )
 
-    myNovel.displayDetails()
+    val novel2 = Novel(
+        "New Mystery Novel",
+        "Ruth Ware"
+    )
 
+    println(novel1.title)
+    println(novel1.pages)
     println()
-
-    myNovel.updatePages(220)
-
-    myNovel.displayDetails()
-
+    println(novel2.title)
+    println(novel2.pages)
 }
 
 class Novel(
     val title: String,
     val author: String,
-    var pages: Int
+    val pages: Int
 ) {
-    fun updatePages(newPages: Int) {
-        require(newPages > 0) {
-            "Pages must be greater than zero."
-        }
+    constructor(title: String, author: String) :
+        this(title, author, 0)
 
-        pages = newPages
-    }
-    fun displayDetails() {
-        println("Title: $title")
-        println("Author: $author")
-        println("Pages: $pages")
-    }
 }
+
+
