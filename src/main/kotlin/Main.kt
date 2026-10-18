@@ -2,21 +2,23 @@ import com.sun.org.apache.xpath.internal.operations.And
 
 fun main() {
 
-    val bookTitle = "The Alchemist"
-    val bookPrice = 12.0
-    val quantity = 3
-    val inStock = true
+    val productName = "Wireless Headphones"
+    val price = 80.0
+    val quantityInStock = 5
+    val customerMoney = 100.0
 
-    val totalCost = bookPrice * quantity
+    val totalPrice = price * 2
 
-    println(bookTitle)
-    println(totalCost)
-
-    if (inStock && quantity > 0) {
-        println("Purchase allowed!")
+    if (customerMoney >= totalPrice && quantityInStock >= 2) {
+        println("Purchase successful!")
+    } else if (customerMoney >= totalPrice) {
+        println("Not enough stock!")
     } else {
-        println("Purchase denied.")
+        println("Insufficient funds!")
     }
+
+    println(productName)
+    println(totalPrice)
 }
 
 
