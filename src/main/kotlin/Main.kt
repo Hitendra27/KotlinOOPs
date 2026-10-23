@@ -1,22 +1,18 @@
 import com.sun.org.apache.xpath.internal.operations.And
 
 fun main() {
-    val product1 = Product("Headphones", 80)
+    val product1 = Product("Headphones", 75)
+    val product2 = product1.copy(price = 65)
 
-    product1.price = 75
-
-    println(product1.name)
-    println(product1.price)
+    println(product1)
+    println(product2)
 }
 
-class Product(
+data class Product(
     val name: String,
-    var price: Int
-) {
-    init {
-        require(price >= 0)
-    }
-}
+    val price: Int
+)
+
 
 
 
