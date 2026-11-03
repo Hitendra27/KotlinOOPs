@@ -1,28 +1,37 @@
 fun main() {
-    val prices = mutableListOf(45, 120, 15, 300, 80, 25, 200)
+    val stock = mutableListOf(5, 0, 12, 3, 0, 20, 8)
 
-    var largest = prices[0]
-    var smallest = prices[0]
-    var total = 0
+    var totalStock = 0
+    var outOfStockCount = 0
+    var inStockCount = 0
+    var largestStock = stock[0]
+    var smallestStock = stock[0]
 
-    for (price in prices) {
-        total += price
+    for (item in stock) {
+        totalStock += item
 
-        if (largest < price) {
-            largest = price
+        if (item == 0) {
+            outOfStockCount++
         }
 
-        if (smallest > price) {
-            smallest = price
+        if (item > 0) {
+            inStockCount++
+        }
+
+        if (item > largestStock) {
+            largestStock = item
+        }
+
+        if (item < smallestStock && item > 0) {
+            smallestStock = item
         }
     }
 
-    val averagePrice = total.toDouble() / prices.size
-
-    println("Total: $total")
-    println("Highest price: $largest")
-    println("Lowest price: $smallest")
-    println("The average price: $averagePrice")
+    println("Total stock: $totalStock")
+    println("Out of stock products: $outOfStockCount")
+    println("Products in stock: $inStockCount")
+    println("Highest stock: $largestStock")
+    println("Lowest available stock: $smallestStock")
 }
 
 
