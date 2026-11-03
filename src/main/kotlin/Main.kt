@@ -1,48 +1,42 @@
-import com.sun.org.apache.xpath.internal.operations.And
-
 fun main() {
-    val account1 = BankAccount("Alex", 1500.0)
+    val payment1: Payment = CardPayment()
+    val payment2: Payment = PayPalPayment()
+    val payment3: Payment = CashPayment()
+    val payment4: Payment = BankTransferPayment()
 
-    account1.displayAccountSummary()
-    account1.withdraw(-100.0)
-    account1.withdraw(300.00)
-    println(account1.balance)
-    account1.displayAccountSummary()
-
+    payment1.processPayment()
+    payment2.processPayment()
+    payment3.processPayment()
+    payment4.processPayment()
 }
 
-class BankAccount(
-    val accountHolder: String,
-    balance: Double
-) {
-    var balance: Double = balance
-        private set
+abstract class Payment {
+    abstract fun processPayment()
+}
 
-    fun deposit(amount: Double) {
-        if (amount > 0) {
-            balance += amount
-        } else {
-            println("Invalid deposit amount")
-        }
-    }
-
-    fun withdraw(amount: Double) {
-        if (amount > 0 && balance >= amount) {
-            balance -= amount
-        } else if (amount <= 0) {
-            println("Invalid withdrawal amount")
-        } else {
-            println("Not enough money in account")
-        }
-    }
-
-    fun displayAccountSummary() {
-        println("Account holder: $accountHolder")
-        println("Current balance: $balance")
+class CardPayment() : Payment() {
+    override fun processPayment() {
+        println("Card payment successful")
     }
 }
 
+class PayPalPayment() : Payment() {
+    override fun processPayment() {
+        println("PayPal payment successful")
+    }
+}
 
+class CashPayment() : Payment() {
+    override fun processPayment() {
+        println("Cash payment successful")
+    }
+}
+
+class BankTransferPayment() : Payment() {
+    override fun processPayment() {
+        println("Bank transfer successful")
+    }
+}
 
 
 
