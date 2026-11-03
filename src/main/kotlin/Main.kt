@@ -1,26 +1,28 @@
 fun main() {
-    val prices = mutableListOf(20, 75, 30, 120, 50, 200)
+    val prices = mutableListOf(45, 120, 15, 300, 80, 25, 200)
 
+    var largest = prices[0]
+    var smallest = prices[0]
     var total = 0
-    var expensiveCount = 0
-    var affordableCount = 0
 
     for (price in prices) {
         total += price
 
-        if (price > 50) {
-            expensiveCount++
-        } else {
-            affordableCount++
+        if (largest < price) {
+            largest = price
+        }
+
+        if (smallest > price) {
+            smallest = price
         }
     }
 
-    val average = total.toDouble() / prices.size
+    val averagePrice = total.toDouble() / prices.size
 
-    println("Total basket value: $total")
-    println("Expensive products: $expensiveCount")
-    println("Affordable products: $affordableCount")
-    println("Average product price: $average")
+    println("Total: $total")
+    println("Highest price: $largest")
+    println("Lowest price: $smallest")
+    println("The average price: $averagePrice")
 }
 
 
