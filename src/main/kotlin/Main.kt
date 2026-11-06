@@ -1,13 +1,16 @@
 fun main() {
 
-    val prices = arrayOf(100, 250, 400, 150, 500)
+    val products = listOf(
+        "Laptop",
+        "Phone",
+        "Keyboard",
+        "Mouse",
+        "Monitor"
+    )
 
-    var total = 0
-
-    for (price in prices) {
-        total += price
+    for (index in products.indices) {
+        println("$index: ${products[index]}")
     }
-    println(total)
 }
 
 
