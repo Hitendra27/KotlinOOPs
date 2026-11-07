@@ -1,16 +1,15 @@
 fun main() {
 
-    val products = listOf(
+    val products = mutableListOf(
         "Laptop",
         "Phone",
-        "Keyboard",
-        "Mouse",
-        "Monitor"
+        "Mouse"
     )
 
-    for (index in products.indices) {
-        println("$index: ${products[index]}")
-    }
+    products.add("Keyboard")
+    products.add(1, "Tablet")
+
+    println(products)
 }
 
 
