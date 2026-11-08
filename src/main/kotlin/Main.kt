@@ -1,15 +1,17 @@
 fun main() {
 
-    val receipt = """
-        NovaCart
-        Product: Laptop
-        Quantity: 2
-        Total: £2500
-    """.trimIndent()
+    val firstName = "sanjay"
+    val lastName = "quessou"
 
-    println(receipt)
+    fun String.capitalizeFirstLetter(): String {
+        return this.replaceFirstChar { it.uppercase() }
+    }
+
+    val fullName = "${firstName.capitalizeFirstLetter()} ${lastName.capitalizeFirstLetter()}"
+
+    println(fullName)
+
 }
-
 
 
 
