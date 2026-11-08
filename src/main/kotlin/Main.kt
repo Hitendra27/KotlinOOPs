@@ -2,19 +2,17 @@ fun main() {
 
     val products = mutableListOf(
         "Laptop",
-        "Phone",
-        "Mouse"
+        "Phone"
     )
 
-    products.add("Keyboard")
-    products.add(1, "Tablet")
+    val newProducts = mutableListOf(
+        "Camera",
+        "Headphones"
+    )
 
+    products.addAll(newProducts)
     println(products)
 }
-
-
-
-
 
 
 
