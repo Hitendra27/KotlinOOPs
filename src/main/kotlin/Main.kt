@@ -1,17 +1,13 @@
 fun main() {
 
-    val products = mutableListOf(
-        "Laptop",
-        "Phone"
-    )
+    val receipt = """
+        NovaCart
+        Product: Laptop
+        Quantity: 2
+        Total: £2500
+    """.trimIndent()
 
-    val newProducts = mutableListOf(
-        "Camera",
-        "Headphones"
-    )
-
-    products.addAll(newProducts)
-    println(products)
+    println(receipt)
 }
 
 
