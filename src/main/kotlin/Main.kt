@@ -1,23 +1,19 @@
 fun main() {
 
-    val firstName = "sanjay"
-    val lastName = "quessou"
+    val product = "Laptop"
+    val price = 750
+    val stock = 5
+    val orderStatus = "PAID"
+    val paymentMethod = "Card"
 
-    fun String.capitalizeFirstLetter(): String {
-        return this.replaceFirstChar { it.uppercase() }
+    when (orderStatus) {
+        "PENDING" -> println("payment is pending")
+        "PAID" -> println("payment paid")
+        "FAILED" -> println("payment has been failed")
+        else -> println("payment has been refunded")
     }
 
-    val fullName = "${firstName.capitalizeFirstLetter()} ${lastName.capitalizeFirstLetter()}"
-
-    println(fullName)
-
 }
-
-
-
-
-
-
 
 
 
