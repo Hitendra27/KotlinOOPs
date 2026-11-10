@@ -6,12 +6,13 @@ fun main() {
     val orderStatus = "PAID"
     val paymentMethod = "Card"
 
-    when (orderStatus) {
-        "PENDING" -> println("payment is pending")
-        "PAID" -> println("payment paid")
-        "FAILED" -> println("payment has been failed")
-        else -> println("payment has been refunded")
-    }
+   val productMessage = if (stock > 0) {
+       "Product available"
+   } else {
+       "Product unavailable"
+   }
+
+    println(productMessage)
 
 }
 
